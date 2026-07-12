@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      riskengine --mode replay
+      --csv /app/data/sample_trades.csv
+      --db /app/data/risk_journal.db
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "9000:9000"
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python3 -m risk.dashboard.app
+    ports:
+      - "8050:8050"
+    depends_on:
+      - engine
+    environment:
+      - RISK_ENGINE_HOST=engine
+      - RISK_ENGINE_PORT=9000
+
+  demo-data:
+    image: python:3.11-slim
+    command: python3 /app/scripts/seed_data.py
+    volumes:
+      - ./data:/app/data
+      - ./scripts:/app/scripts

@@ -1,0 +1,40 @@
+strategies:
+  stat_arb:
+    name: "Statistical Arbitrage"
+    description: "Mean-reversion pairs trading"
+    instruments: [equity, etf]
+    max_position_size: 50000
+    max_daily_trades: 500
+    risk_budget: 2000000
+
+  momentum:
+    name: "Momentum"
+    description: "Cross-sectional momentum"
+    instruments: [equity]
+    max_position_size: 20000
+    max_daily_trades: 200
+    risk_budget: 3000000
+
+  market_making:
+    name: "Market Making"
+    description: "Liquidity provision"
+    instruments: [equity, etf, options]
+    max_position_size: 10000
+    max_daily_trades: 5000
+    risk_budget: 1000000
+
+  vol_arb:
+    name: "Volatility Arbitrage"
+    description: "Vol surface trading"
+    instruments: [options]
+    max_position_size: 5000
+    max_daily_trades: 100
+    risk_budget: 1500000
+
+  macro:
+    name: "Macro"
+    description: "Macro event-driven"
+    instruments: [futures, fx]
+    max_position_size: 100000
+    max_daily_trades: 50
+    risk_budget: 5000000

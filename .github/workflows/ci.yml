@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake libsqlite3-dev
+
+      - name: Configure
+        run: |
+          mkdir -p build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_TOOLS=ON
+
+      - name: Build
+        run: |
+          cd build
+          make -j$(nproc)
+
+      - name: Test
+        run: |
+          cd build
+          ctest --output-on-failure -j$(nproc)
+
+      - name: Run Greeks Test
+        run: ./build/test_greeks
+
+  python-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python deps
+        run: |
+          pip install -e ".[dev]"
+
+      - name: Run Python tests
+        run: |
+          cd python
+          python -m pytest tests/ -v
+
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake libsqlite3-dev
+
+      - name: Build Release
+        run: |
+          mkdir -p build && cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON
+          make -j$(nproc)
+
+      - name: Generate sample data
+        run: python3 scripts/seed_data.py 10000 100000
+
+      - name: Replay benchmark
+        run: |
+          cd build
+          time ./riskengine --mode replay --csv ../data/sample_trades.csv

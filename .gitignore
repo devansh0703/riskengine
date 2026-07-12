@@ -1,0 +1,42 @@
+# Build
+build/
+cmake-build-*/
+*.o
+*.so
+*.a
+*.dylib
+.cache/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+.eggs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Data
+*.db
+*.db-wal
+*.db-shm
+
+# OS
+.DS_Store
+Thumbs.db
+
+# FlatBuffers generated
+include/flatbuffers/generated/
+
+# Compiled binaries
+riskengine
+risk_cli
+replay_tool
+export_tool
+test_*

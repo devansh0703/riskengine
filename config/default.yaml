@@ -1,0 +1,42 @@
+risk_limits:
+  daily_stop_loss: 500000
+  max_drawdown: 1000000
+  max_drawdown_duration_minutes: 60
+
+  position_limits:
+    default:
+      max_long: 10000
+      max_short: 10000
+      hard: true
+    AAPL:
+      max_long: 50000
+      max_short: 50000
+      hard: true
+    TSLA:
+      max_long: 20000
+      max_short: 20000
+      hard: false
+
+  exposure:
+    max_gross: 500000000
+    max_net: 250000000
+    max_concentration: 0.25
+
+alerts:
+  cooldown_ms: 60000
+  channels:
+    - console
+    - file
+  severity_thresholds:
+    large_position: 10000000
+    daily_loss_warning: 200000
+    daily_loss_critical: 500000
+    drawdown_warning: 500000
+    drawdown_critical: 1000000
+
+lot_matching:
+  method: FIFO
+
+trade_journal:
+  db_path: risk_journal.db
+  wal_mode: true

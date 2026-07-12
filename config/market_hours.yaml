@@ -1,0 +1,42 @@
+exchanges:
+  NYSE:
+    timezone: "US/Eastern"
+    open_hour_utc: 14
+    close_hour_utc: 21
+    holidays: ["2024-01-01", "2024-01-15", "2024-02-19",
+               "2024-03-29", "2024-05-27", "2024-06-19",
+               "2024-07-04", "2024-09-02", "2024-11-28",
+               "2024-12-25"]
+
+  NASDAQ:
+    timezone: "US/Eastern"
+    open_hour_utc: 14
+    close_hour_utc: 21
+    holidays: ["2024-01-01", "2024-01-15", "2024-02-19",
+               "2024-03-29", "2024-05-27", "2024-06-19",
+               "2024-07-04", "2024-09-02", "2024-11-28",
+               "2024-12-25"]
+
+  CME:
+    timezone: "US/Central"
+    open_hour_utc: 23
+    close_hour_utc: 22
+    notes: "Nearly 24h, break at 16:00-17:00 CT"
+
+  LSE:
+    timezone: "Europe/London"
+    open_hour_utc: 8
+    close_hour_utc: 16
+
+  HKEX:
+    timezone: "Asia/Hong_Kong"
+    open_hour_utc: 1
+    close_hour_utc: 8
+
+pre_market:
+  enabled: true
+  start_offset_minutes: -30
+
+after_hours:
+  enabled: true
+  end_offset_minutes: 60
