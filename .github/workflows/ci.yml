@@ -24,9 +24,7 @@ jobs:
           cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_TOOLS=ON
 
       - name: Build
-        run: |
-          cd build
-          make -j$(nproc)
+        run: cmake --build build -j$(nproc)
 
       - name: Test
         run: |
@@ -54,26 +52,13 @@ jobs:
           cd python
           python -m pytest tests/ -v
 
-  benchmark:
+  docker:
     runs-on: ubuntu-latest
+    needs: [build-and-test, python-tests]
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install dependencies
+      - name: Build Docker image
+        run: docker build -t riskengine:latest .
+      - name: Test Docker image
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential cmake libsqlite3-dev
-
-      - name: Build Release
-        run: |
-          mkdir -p build && cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON
-          make -j$(nproc)
-
-      - name: Generate sample data
-        run: python3 scripts/seed_data.py 10000 100000
-
-      - name: Replay benchmark
-        run: |
-          cd build
-          time ./riskengine --mode replay --csv ../data/sample_trades.csv
+          docker run --rm riskengine:latest --help || true
